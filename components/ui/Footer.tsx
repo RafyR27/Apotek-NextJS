@@ -22,7 +22,7 @@ const Footer = () => {
 
         <div className="flex flex-col gap-2">
           <p className="font-bold text-[1.1rem]">Connect</p>
-          <div className="flex gap-3 items-center text-2xl">
+          <div className="flex gap-3 items-center text-[1.8rem]">
             <a href="">
               <FaInstagram />
             </a>

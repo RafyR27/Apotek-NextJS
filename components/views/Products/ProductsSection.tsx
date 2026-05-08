@@ -53,7 +53,7 @@ const ProductsSection = () => {
 
   return (
     <div className="w-full min-h-screen lg:px-20 px-5">
-      <Breadcrumb className="py-7 font-medium">
+      <Breadcrumb className="lg:py-7 pb-5 font-medium">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/" className="text-primary">
@@ -151,7 +151,7 @@ const ProductsSection = () => {
                   <div className="w-full flex flex-col justify-between">
                     <p
                       className={cn(
-                        "w-1/2 min-h-12 font-semibold line-clamp-2",
+                        "w-full min-h-12 font-semibold line-clamp-2",
                         product.stock == 0 && "text-muted-foreground",
                       )}
                     >

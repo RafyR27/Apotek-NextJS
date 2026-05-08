@@ -59,7 +59,7 @@ const CategorySection = () => {
 
   return (
     <div className="w-full min-h-screen lg:px-20 px-5">
-      <Breadcrumb className="py-7 font-medium">
+      <Breadcrumb className="lg:py-7 pb-7 font-medium">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/" className="text-primary">
