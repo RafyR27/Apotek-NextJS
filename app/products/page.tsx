@@ -1,12 +1,12 @@
 "use client";
 
 import MainLayout from "@/components/layouts/MainLayout/MainLayout";
-import HomeSection from "@/components/views/Home/HomeSection";
+import ProductsSection from "@/components/views/Products/ProductsSection";
 
 export default function Home() {
   return (
     <MainLayout>
-      <HomeSection></HomeSection>
+      <ProductsSection></ProductsSection>
     </MainLayout>
   );
 }
