@@ -8,7 +8,7 @@ import { Button } from "./button";
 import { FaCartShopping, FaPrescriptionBottleMedical } from "react-icons/fa6";
 import { IoIosCall, IoMdClose } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiArrowDropDownLine, RiArrowDropRightLine } from "react-icons/ri";
 import DROPDOWN_NAVBAR from "./constant/Navbar.constant";
 import Link from "next/link";
@@ -36,32 +36,48 @@ const Navbar = () => {
 
   const path = usePathname();
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
   return (
     <>
       <nav className="w-full lg:h-22 h-18 bg-background lg:px-20 px-5 flex justify-between items-center border-b lg:border-none">
         <div className="flex items-center gap-2">
           <FaHospitalSymbol className="text-tertiary text-[2rem]" />
-          <h1 className="text-primary font-heading font-bold text-[1.2rem]">
+          <Link href={"/"} className="text-primary font-heading font-bold text-[1.2rem]">
             ApotekKart
-          </h1>
+          </Link>
         </div>
 
         <div className="hidden lg:block">
           <InputGroup className="max-w-xl">
-            <InputGroupAddon align="inline-start" className="border-r-2 px-4">
+            <InputGroupAddon align="inline-start" className="border-r-2 px-2 w-33">
               <MdLocationOn />
-              <p>Klari, Karawang</p>
+              <p className="truncate">Klari, Karawang</p>
             </InputGroupAddon>
-            <InputGroupInput className="w-80" placeholder="Cari Obat..." />
+            <InputGroupInput className="w-[66%]" placeholder="Cari Obat..." />
             <InputGroupAddon className="px-2">
               <FaSearch />
             </InputGroupAddon>
           </InputGroup>
         </div>
 
-        <div className="items-center justify-between gap-3 hidden lg:flex">
+        <div className="items-center justify-between gap-2 hidden lg:flex">
           <Button variant="outline">
-            <Link className="flex gap-2 px-4" href={"/upload-prescription"}>
+            <Link className="flex gap-2 px-2" href={"/upload-prescription"}>
               <FaPrescriptionBottleMedical />
               <p>Upload</p>
             </Link>
@@ -75,7 +91,7 @@ const Navbar = () => {
           </Button> */}
 
           <Button variant="outline">
-            <Link href={"/cart"} className="flex gap-2 px-4">
+            <Link href={"/cart"} className="flex gap-2 px-2">
               <FaCartShopping />
               <p>Cart</p>
             </Link>
@@ -132,7 +148,7 @@ const Navbar = () => {
             )}
 
             {activeMenu?.key === item.key && (
-              <div className="absolute top-8 left-0 z-50 max-h-70 h-auto flex justify-center items-center w-full bg-background p-6 pb-10 shadow-xl transition-all duration-300">
+              <div className="absolute top-8 left-0 z-50 max-h-70 h-auto flex justify-center items-center w-full bg-background py-6 pb-10 shadow-xl transition-all duration-300">
                 <div className="flex flex-col flex-wrap gap-y-4 gap-x-10 max-h-70 items-start w-1/2">
                   {item.menu.map((item) => (
                     <Link
@@ -162,7 +178,7 @@ const Navbar = () => {
 
       {/* Mobile Sidebar */}
       <RemoveScroll
-        style={{ WebkitOverflowScrolling: "touch" }}
+        enabled={isOpen}
         className={`fixed right-0 top-0 z-50 h-screen innet w-[85%] max-w-sm border-l bg-background p-6  shadow-2xl transition-all duration-300 lg:hidden overflow-y-auto flex flex-col justify-between ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
@@ -264,16 +280,17 @@ const Navbar = () => {
             ))}
           </div>
         </div>
-        <div className="mt-20">
+        <div className="mt-20 mb-10">
           <h4 className="text-muted-foreground text-[0.8rem]">
             ApotekKart 1.0v
           </h4>
         </div>
       </RemoveScroll>
 
-      <div
+      <RemoveScroll
+        enabled={isMobile && !!activeMenu}
         className={cn(
-          "fixed top-0 right-0 z-50 h-screen flex flex-col justify-start items-start w-[85%] bg-background p-6 pb-20 shadow-xl transition-all duration-300",
+          "fixed top-0 right-0 z-50 h-screen lg:hidden flex flex-col justify-start items-start w-[85%] max-w-sm bg-background p-6 pb-20 shadow-xl transition-all duration-300",
           activeMenu?.key ? "translate-x-0" : "translate-x-full",
         )}
       >
@@ -316,7 +333,7 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-      </div>
+      </RemoveScroll>
     </>
   );
 };

@@ -35,6 +35,9 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
 import { BiSort } from "react-icons/bi";
+import { IoMdClose } from "react-icons/io";
+import { MdFilterList } from "react-icons/md";
+import { RemoveScroll } from "react-remove-scroll";
 
 const ProductsSection = () => {
   const products = PRODUCTS;
@@ -42,6 +45,7 @@ const ProductsSection = () => {
 
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("all");
+  const [isOpen, setOpen] = useState(false);
 
   const handleCheckboxChange = (brand: string) => {
     setSelectedBrands((prev) =>
@@ -77,7 +81,7 @@ const ProductsSection = () => {
           <div className="w-1/5 bg-background rounded-md border px-3 text-[0.9rem] h-fit hidden lg:block">
             <p className="border-b py-3 font-bold">FILTERS</p>
             <p className="pt-3 font-medium">Brands</p>
-            <div className="py-5 px-5 flex flex-col gap-3">
+            <div className="py-5 px-3 flex flex-col gap-3">
               {brands.map((item) => (
                 <FieldGroup
                   key={item.key}
@@ -90,8 +94,12 @@ const ProductsSection = () => {
                       checked={selectedBrands.includes(item.key)}
                       onCheckedChange={() => handleCheckboxChange(item.key)}
                     />
-                    <FieldLabel className="cursor-pointer" htmlFor={item.key}>
+                    <FieldLabel
+                      className="cursor-pointer flex justify-between"
+                      htmlFor={item.key}
+                    >
                       {item.name}
+                      <p>15</p>
                     </FieldLabel>
                   </Field>
                 </FieldGroup>
@@ -104,7 +112,16 @@ const ProductsSection = () => {
             <div className="flex justify-between items-center py-3 gap-2 lg:gap-0">
               <p className=" font-bold">Products - Total Items (1675)</p>
 
-              <div className="max-w-50 w-full flex items-center gap-2">
+              <Button
+                variant="outline"
+                className="bg-muted max-w-25 w-full lg:hidden flex items-center"
+                onClick={() => setOpen(true)}
+              >
+                <MdFilterList />
+                Filter
+              </Button>
+
+              <div className="max-w-50 w-full hidden lg:flex items-center gap-2">
                 <p className="flex items-center gap-1 text-sm font-medium">
                   <BiSort />
                   Sort:
@@ -129,7 +146,7 @@ const ProductsSection = () => {
             </div>
 
             {/* product card */}
-            <div className="w-full grid lg:grid-cols-4 grid-cols-2 gap-x-5 gap-y-3">
+            <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-x-5 gap-y-3">
               {products.map((product, indeks) => (
                 <div
                   key={indeks}
@@ -211,6 +228,79 @@ const ProductsSection = () => {
       <div className="w-full h-65 flex justify-center items-center mb-7">
         <div className="lg:w-4/5 w-full h-50 bg-primary rounded-2xl"></div>
       </div>
+
+      {/* blur background */}
+      <div
+        onClick={() => setOpen(false)}
+        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-all duration-300 lg:hidden ${
+          isOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        }`}
+      />
+
+      {/* filter mobile */}
+      <RemoveScroll
+        enabled={isOpen}
+        className={`fixed right-0 top-0 z-50 h-screen innet w-[85%] max-w-sm border-l bg-background p-6 shadow-2xl transition-all duration-300 lg:hidden overflow-y-auto flex flex-col justify-start gap-5 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex justify-between w-full">
+          <p className="font-bold text-[1.1rem]">Filter</p>
+          <button
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-center"
+          >
+            <IoMdClose className="text-2xl" />
+          </button>
+        </div>
+
+        <div className="flex w-full justify-between">
+          <p className="flex items-center font-medium">Sort</p>
+          <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
+            <SelectTrigger className="w-full max-w-48">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Sort by</SelectLabel>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="price">Price</SelectItem>
+                <SelectItem value="featured">Featured</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <p className="font-medium">Brands</p>
+          <div className="py-3 px-5 flex flex-wrap gap-3 h-[50vh]">
+            {brands.map((item) => (
+              <FieldGroup
+                key={item.key}
+                className="mx-auto w-full text-muted-foreground"
+              >
+                <Field orientation="horizontal">
+                  <Checkbox
+                    id={item.key}
+                    name="brands"
+                    checked={selectedBrands.includes(item.key)}
+                    onCheckedChange={() => handleCheckboxChange(item.key)}
+                  />
+                  <FieldLabel
+                    className="cursor-pointer flex justify-between"
+                    htmlFor={item.key}
+                  >
+                    {item.name}
+                    <p>15</p>
+                  </FieldLabel>
+                </Field>
+              </FieldGroup>
+            ))}
+          </div>
+        </div>
+      </RemoveScroll>
     </div>
   );
 };
