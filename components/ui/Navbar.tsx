@@ -15,6 +15,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { LuClipboardList } from "react-icons/lu";
+import { RemoveScroll } from "react-remove-scroll";
 
 type MenuItem = {
   key: string;
@@ -37,7 +38,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full lg:h-22 h-18 bg-background lg:px-20 px-5 flex justify-between items-center border lg:border-none">
+      <nav className="w-full lg:h-22 h-18 bg-background lg:px-20 px-5 flex justify-between items-center border-b lg:border-none">
         <div className="flex items-center gap-2">
           <FaHospitalSymbol className="text-tertiary text-[2rem]" />
           <h1 className="text-primary font-heading font-bold text-[1.2rem]">
@@ -160,7 +161,7 @@ const Navbar = () => {
       />
 
       {/* Mobile Sidebar */}
-      <div
+      <RemoveScroll
         style={{ WebkitOverflowScrolling: "touch" }}
         className={`fixed right-0 top-0 z-50 h-screen innet w-[85%] max-w-sm border-l bg-background p-6  shadow-2xl transition-all duration-300 lg:hidden overflow-y-auto flex flex-col justify-between ${
           isOpen ? "translate-x-0" : "translate-x-full"
@@ -268,7 +269,7 @@ const Navbar = () => {
             ApotekKart 1.0v
           </h4>
         </div>
-      </div>
+      </RemoveScroll>
 
       <div
         className={cn(
