@@ -53,7 +53,7 @@ const ProductsSection = () => {
 
   return (
     <div className="w-full min-h-screen lg:px-20 px-5">
-      <Breadcrumb className="lg:py-7 pb-5 font-medium">
+      <Breadcrumb className="lg:py-7 py-5 font-medium">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/" className="text-primary">

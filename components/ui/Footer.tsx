@@ -5,7 +5,7 @@ import { FaHospitalSymbol, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className="w-full h-auto px-6 lg:px-20 flex lg:flex-row flex-col justify-around pb-20 gap-10 lg:gap-0">
+    <div className="w-full h-auto px-5 lg:px-20 flex lg:flex-row flex-col justify-around pb-20 gap-10 lg:gap-0">
       <div className="lg:w-1/3 w-full flex flex-col gap-5">
         <div className="flex items-center gap-2">
           <FaHospitalSymbol className="text-tertiary text-[2rem]" />
