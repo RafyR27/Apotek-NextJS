@@ -303,6 +303,8 @@ const ProductsSection = () => {
       </RemoveScroll>
     </div>
   );
+
+  
 };
 
 export default ProductsSection;

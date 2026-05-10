@@ -1,3 +1,4 @@
+import { signIn } from "@/lib/auth-client";
 import { useState } from "react";
 
 const useRegister = () => {
@@ -10,11 +11,19 @@ const useRegister = () => {
       setIsVisibleConfirm(!isVisibleConfirm);
     };
 
+    const registerWithGoogle = async () => {
+      await signIn.social({
+        provider: "google",
+        callbackURL: "/products"
+      })
+    }
+
     return {
       toggleVisibility,
       isVisible,
       toggleVisibilityConfirm,
       isVisibleConfirm,
+      registerWithGoogle,
     };
 }
 

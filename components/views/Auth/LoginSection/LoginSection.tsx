@@ -1,20 +1,22 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FaEye, FaEyeSlash, FaHospitalSymbol } from "react-icons/fa";
 import useLogin from "./useLogin";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginSection = () => {
-    const { toggleVisibility, isVisible } = useLogin();
+  const { toggleVisibility, isVisible, loginWithGoogle } = useLogin();
+
+  
 
   return (
     <>
@@ -41,8 +43,10 @@ const LoginSection = () => {
       {/* Social Buttons */}
       <div className="mb-6">
         <Button
+          type="button"
           variant={"outline"}
           className="w-full h-10 rounded-xl text-sm font-medium shadow-sm flex gap-3"
+          onClick={() => loginWithGoogle()}
         >
           <FcGoogle />
           Login with Google

@@ -1,3 +1,4 @@
+import { signIn } from "@/lib/auth-client";
 import { useState } from "react";
 
 const useLogin = () => {
@@ -6,9 +7,17 @@ const useLogin = () => {
       setIsVisible(!isVisible);
     };
 
+    const loginWithGoogle = async () => {
+      await signIn.social({
+        provider: "google",
+        callbackURL: "/products"
+      })
+    }
+
     return {
       toggleVisibility,
       isVisible,
+      loginWithGoogle,
     };
 }
 

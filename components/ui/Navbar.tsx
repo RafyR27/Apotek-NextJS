@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { LuClipboardList } from "react-icons/lu";
 import { RemoveScroll } from "react-remove-scroll";
+import { ISession } from "@/types/user";
+import Image from "next/image";
 
 type MenuItem = {
   key: string;
@@ -29,7 +31,13 @@ type DropdownItem = {
   menu: MenuItem[];
 };
 
-const Navbar = () => {
+interface NavbarProps {
+  session: ISession | null;
+}
+
+const Navbar = (props: NavbarProps) => {
+  const { session } = props;
+
   const dropdown_navbar = DROPDOWN_NAVBAR;
   const [isOpen, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<DropdownItem | null>(null);
@@ -57,14 +65,20 @@ const Navbar = () => {
       <nav className="w-full lg:h-22 h-18 bg-background lg:px-20 px-5 flex justify-between items-center border-b lg:border-none">
         <div className="flex items-center gap-2">
           <FaHospitalSymbol className="text-tertiary text-[2rem]" />
-          <Link href={"/"} className="text-primary font-heading font-bold text-[1.2rem]">
+          <Link
+            href={"/"}
+            className="text-primary font-heading font-bold text-[1.2rem]"
+          >
             ApotekKart
           </Link>
         </div>
 
         <div className="hidden lg:block">
           <InputGroup className="max-w-xl">
-            <InputGroupAddon align="inline-start" className="border-r-2 px-2 w-33">
+            <InputGroupAddon
+              align="inline-start"
+              className="border-r-2 px-2 w-33"
+            >
               <MdLocationOn />
               <p className="truncate">Klari, Karawang</p>
             </InputGroupAddon>
@@ -83,12 +97,14 @@ const Navbar = () => {
             </Link>
           </Button>
 
-          {/* <Button variant="outline">
-            <Link href={"/history"} className="flex gap-2 px-4">
-              <LuClipboardList />
-              <p>History</p>
-            </Link>
-          </Button> */}
+          {session?.user.id && (
+            <Button variant="outline">
+              <Link href={"/history"} className="flex gap-2 px-4">
+                <LuClipboardList />
+                <p>History</p>
+              </Link>
+            </Button>
+          )}
 
           <Button variant="outline">
             <Link href={"/cart"} className="flex gap-2 px-2">
@@ -102,17 +118,25 @@ const Navbar = () => {
             <p>Call Canter</p>
           </Button>
 
-          <Button className="px-4">
-            <Link href={"/auth/login"}>Login / Register</Link>
-          </Button>
-
           {/* Profile */}
-          {/* <Link
-            href={"/profil"}
-            className="flex w-full justify-start items-center gap-3"
-          >
-            <span className="w-8 h-8 rounded-full bg-red-500"></span>
-          </Link> */}
+          {session?.user.id ? (
+            <Link
+              href={"/profile"}
+              className="flex w-full justify-start items-center gap-3"
+            >
+              <Image
+                src={session.user.image || ""}
+                alt={`profile-${session.user.name}`}
+                className="w-8 h-8 rounded-full"
+                width={300}
+                height={300}
+              />
+            </Link>
+          ) : (
+            <Button className="px-4">
+              <Link href={"/auth/login"}>Login / Register</Link>
+            </Button>
+          )}
         </div>
 
         <button
@@ -218,22 +242,35 @@ const Navbar = () => {
           <div className="space-y-3 flex flex-col gap-3">
             <div className="flex flex-col gap-6">
               {/* profile */}
-              {/* <Link
-              href={"/profil"}
-              className="flex w-full justify-start items-center gap-3"
-            >
-              <span className="w-8 h-8 rounded-full bg-red-500"></span>
-              <div className="w-1/2">
-                <p className="text-[0.8rem] truncate">Budi Subudi</p>
-                <p className="text-[0.7rem] text-muted-foreground truncate">BudiSubudi@gmail.com</p>
-              </div>
-            </Link> */}
-              <Button
-                className="flex w-full justify-center items-center"
-                size="lg"
-              >
-                <Link href={"/auth/login"}>Login / Register</Link>
-              </Button>
+              {session?.user.id ? (
+                <Link
+                  href={"/profile"}
+                  className="flex w-full justify-start items-center gap-3"
+                >
+                  <Image
+                    src={session.user.image || ""}
+                    alt={`profile-${session.user.name}`}
+                    className="w-8 h-8 rounded-full"
+                    width={300}
+                    height={300}
+                  />
+                  <div className="w-1/2">
+                    <p className="text-[0.8rem] truncate">
+                      {session.user.name}
+                    </p>
+                    <p className="text-[0.7rem] text-muted-foreground truncate">
+                      {session.user.email}
+                    </p>
+                  </div>
+                </Link>
+              ) : (
+                <Button
+                  className="flex w-full justify-center items-center"
+                  size="lg"
+                >
+                  <Link href={"/auth/login"}>Login / Register</Link>
+                </Button>
+              )}
 
               <Link
                 href={"/upload-prescription"}

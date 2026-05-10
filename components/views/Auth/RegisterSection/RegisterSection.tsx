@@ -19,6 +19,7 @@ const RegisterSection = () => {
     isVisible,
     toggleVisibilityConfirm,
     isVisibleConfirm,
+    registerWithGoogle,
   } = useRegister();
 
   return (
@@ -46,8 +47,10 @@ const RegisterSection = () => {
       {/* Social Buttons */}
       <div className="mb-6">
         <Button
+          type="button"
           variant={"outline"}
           className="w-full h-10 rounded-xl text-sm font-medium shadow-sm flex gap-3"
+          onClick={() => registerWithGoogle()}
         >
           <FcGoogle />
           Sign Up with Google

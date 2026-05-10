@@ -5,11 +5,11 @@ import Navbar from "@/components/ui/Navbar";
 import { PropType } from "@/types/props";
 
 const MainLayout = (props: PropType) => {
-    const { children } = props;
+    const { children, sessionData } = props;
 
     return (
         <div className="w-full min-h-screen">
-            <Navbar/>
+            <Navbar session={sessionData} />
             <section>{children}</section>
             <Footer/>
         </div>
