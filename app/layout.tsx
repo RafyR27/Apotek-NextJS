@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Providers from "@/hooks/provider";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["600", "700", "800", "900"],
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,7 +33,9 @@ export default function RootLayout({
         poppins.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <Providers>
+        <body className="min-h-full flex flex-col">{children}</body>
+      </Providers>
     </html>
   );
 }

@@ -1,7 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FaEye, FaEyeSlash, FaHospitalSymbol } from "react-icons/fa";
@@ -12,23 +17,32 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { FcGoogle } from "react-icons/fc";
+import { Controller } from "react-hook-form";
+import SpinnerCircle from "@/components/ui/spinner";
 
 const LoginSection = () => {
-  const { toggleVisibility, isVisible, loginWithGoogle } = useLogin();
-
-  
+  const {
+    toggleVisibility,
+    isVisible,
+    loginWithGoogle,
+    control,
+    handleSubmit,
+    errors,
+    handleLogin,
+    isPendingLogin,
+  } = useLogin();
 
   return (
     <>
       {/* Logo */}
-      <div className="flex items-center gap-2 mb-10">
+      <Link href={"/"} className="flex items-center gap-2 mb-10">
         <FaHospitalSymbol className="text-tertiary text-[1.8rem]" />
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">
             ApotekKart
           </h1>
         </div>
-      </div>
+      </Link>
 
       {/* Heading */}
       <div className="mb-8">
@@ -66,51 +80,72 @@ const LoginSection = () => {
         </div>
       </div>
 
+      {errors.root && (
+        <p className="mb-2 text-center font-medium text-red-500">
+          {errors?.root?.message}
+        </p>
+      )}
+
       {/* Form */}
-      <form className="space-y-5">
+      <form className="space-y-5" onSubmit={handleSubmit(handleLogin)}>
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="email">Email*</FieldLabel>
-            <Input
-              className="h-10"
-              type="email"
-              id="email"
-              placeholder="Enter your email address"
-              name="email"
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="password">Password*</FieldLabel>
-            <InputGroup className="h-10">
-              <InputGroupInput
-                id="password"
-                type={isVisible ? "text" : "password"}
-                placeholder="Enter password"
-                name="password"
-              />
-              <InputGroupAddon align="inline-end">
-                <button
-                  className="focus:outline-none my-auto px-2 cursor-pointer"
-                  type="button"
-                  onClick={toggleVisibility}
-                >
-                  {isVisible ? (
-                    <FaEye className="pointer-events-none text-xl text-default-400" />
-                  ) : (
-                    <FaEyeSlash className="pointer-events-none text-xl text-default-400" />
-                  )}
-                </button>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="email">Email*</FieldLabel>
+                <Input
+                  {...field}
+                  className="h-10"
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email address"
+                  name="email"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="password">Password*</FieldLabel>
+                <InputGroup className="h-10">
+                  <InputGroupInput
+                    {...field}
+                    id="password"
+                    type={isVisible ? "text" : "password"}
+                    placeholder="Enter password"
+                    name="password"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <button
+                      className="focus:outline-none my-auto px-2 cursor-pointer"
+                      type="button"
+                      onClick={toggleVisibility}
+                    >
+                      {isVisible ? (
+                        <FaEye className="pointer-events-none text-xl text-default-400" />
+                      ) : (
+                        <FaEyeSlash className="pointer-events-none text-xl text-default-400" />
+                      )}
+                    </button>
+                  </InputGroupAddon>
+                </InputGroup>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
         </FieldGroup>
 
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2">
-            <input type="checkbox" className="rounded" />
-            <p className="text-muted-foreground">Remember Me</p>
-          </div>
-
+        <div className="flex items-center justify-end text-sm">
           <button
             type="button"
             className="font-medium hover:text-emerald-600 transition-colors"
@@ -119,8 +154,12 @@ const LoginSection = () => {
           </button>
         </div>
 
-        <Button className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-semibold">
-          Login to ApotekKart
+        <Button
+          className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-semibold"
+          type="submit"
+          disabled={isPendingLogin}
+        >
+          {isPendingLogin ? <SpinnerCircle /> : "Login to ApotekKart"}
         </Button>
       </form>
 

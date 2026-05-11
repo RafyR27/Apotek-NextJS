@@ -47,7 +47,8 @@ const CategorySection = () => {
 
   const path = usePathname();
 
-  const category = path.split("/").pop();
+  const refCategory = path.split("/").pop();
+  const category = refCategory?.replaceAll("-", " ");
 
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("all");
@@ -122,7 +123,7 @@ const CategorySection = () => {
           <div className="lg:w-4/5 w-full bg-background">
             {/* title */}
             <div className="flex justify-between items-center py-3 gap-2 lg:gap-0">
-              <p className=" font-bold">Products - Total Items (1675)</p>
+              <p className="font-bold capitalize">{category} - Total Items (1675)</p>
 
               <Button
                 variant="outline"

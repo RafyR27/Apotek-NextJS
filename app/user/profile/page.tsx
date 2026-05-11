@@ -1,25 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { signOut, useSession } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Profile() {
-  const { data: session } = useSession();
+  // const { data: session, isPending } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!session) {
-      router.push("/auth/login");
-    }
-  }, [session, router]);
 
   const logOutButton = async () => {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/auth/login");
+          router.push("/products");
         },
       },
     });

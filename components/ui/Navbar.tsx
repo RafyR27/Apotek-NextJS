@@ -16,8 +16,8 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { LuClipboardList } from "react-icons/lu";
 import { RemoveScroll } from "react-remove-scroll";
-import { ISession } from "@/types/user";
 import Image from "next/image";
+import { IPropOnlySession } from "@/types/props";
 
 type MenuItem = {
   key: string;
@@ -31,11 +31,7 @@ type DropdownItem = {
   menu: MenuItem[];
 };
 
-interface NavbarProps {
-  session: ISession | null;
-}
-
-const Navbar = (props: NavbarProps) => {
+const Navbar = (props: IPropOnlySession) => {
   const { session } = props;
 
   const dropdown_navbar = DROPDOWN_NAVBAR;
@@ -91,7 +87,10 @@ const Navbar = (props: NavbarProps) => {
 
         <div className="items-center justify-between gap-2 hidden lg:flex">
           <Button variant="outline">
-            <Link className="flex gap-2 px-2" href={"/upload-prescription"}>
+            <Link
+              className="flex gap-2 px-2"
+              href={"/user/upload-prescription"}
+            >
               <FaPrescriptionBottleMedical />
               <p>Upload</p>
             </Link>
@@ -99,7 +98,7 @@ const Navbar = (props: NavbarProps) => {
 
           {session?.user.id && (
             <Button variant="outline">
-              <Link href={"/history"} className="flex gap-2 px-4">
+              <Link href={"/user/history"} className="flex gap-2 px-4">
                 <LuClipboardList />
                 <p>History</p>
               </Link>
@@ -107,7 +106,7 @@ const Navbar = (props: NavbarProps) => {
           )}
 
           <Button variant="outline">
-            <Link href={"/cart"} className="flex gap-2 px-2">
+            <Link href={"/user/cart"} className="flex gap-2 px-2">
               <FaCartShopping />
               <p>Cart</p>
             </Link>
@@ -121,13 +120,13 @@ const Navbar = (props: NavbarProps) => {
           {/* Profile */}
           {session?.user.id ? (
             <Link
-              href={"/profile"}
+              href={"/user/profile"}
               className="flex w-full justify-start items-center gap-3"
             >
               <Image
                 src={session.user.image || ""}
                 alt={`profile-${session.user.name}`}
-                className="w-8 h-8 rounded-full"
+                className="w-8 h-8 rounded-full border-2"
                 width={300}
                 height={300}
               />
@@ -190,6 +189,16 @@ const Navbar = (props: NavbarProps) => {
         ))}
       </div>
 
+      {/* invisible background */}
+      <div
+        onClick={() => setActiveMenu(null)}
+        className={`fixed inset-0 ${
+          activeMenu
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        }`}
+      />
+
       {/* blur background */}
       <div
         onClick={() => setOpen(false)}
@@ -244,7 +253,7 @@ const Navbar = (props: NavbarProps) => {
               {/* profile */}
               {session?.user.id ? (
                 <Link
-                  href={"/profile"}
+                  href={"/user/profile"}
                   className="flex w-full justify-start items-center gap-3"
                 >
                   <Image
@@ -273,20 +282,23 @@ const Navbar = (props: NavbarProps) => {
               )}
 
               <Link
-                href={"/upload-prescription"}
+                href={"/user/upload-prescription"}
                 className="flex w-full items-center gap-3"
               >
                 <FaPrescriptionBottleMedical className="text-lg" />
                 <p className="text-[1rem]">Upload Prescription</p>
               </Link>
 
-              <Link href={"/cart"} className="flex w-full items-center gap-3">
+              <Link
+                href={"/user/cart"}
+                className="flex w-full items-center gap-3"
+              >
                 <FaCartShopping className="text-lg" />
                 <p className="text-[1rem]">Cart</p>
               </Link>
 
               <Link
-                href={"/history"}
+                href={"/user/history"}
                 className="flex w-full items-center gap-3"
               >
                 <LuClipboardList className="text-lg" />

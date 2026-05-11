@@ -1,7 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FaEye, FaEyeSlash, FaHospitalSymbol } from "react-icons/fa";
@@ -12,6 +17,8 @@ import {
 } from "@/components/ui/input-group";
 import { FcGoogle } from "react-icons/fc";
 import useRegister from "./useRegister";
+import { Controller } from "react-hook-form";
+import SpinnerCircle from "@/components/ui/spinner";
 
 const RegisterSection = () => {
   const {
@@ -20,19 +27,24 @@ const RegisterSection = () => {
     toggleVisibilityConfirm,
     isVisibleConfirm,
     registerWithGoogle,
+    control,
+    handleSubmit,
+    handleRegister,
+    isPendingRegister,
+    errors
   } = useRegister();
 
   return (
     <>
       {/* Logo */}
-      <div className="flex items-center gap-2 mb-10">
+      <Link href={"/"} className="flex items-center gap-2 mb-10">
         <FaHospitalSymbol className="text-tertiary text-[1.8rem]" />
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">
             ApotekKart
           </h1>
         </div>
-      </div>
+      </Link>
 
       {/* Heading */}
       <div className="mb-8">
@@ -69,84 +81,131 @@ const RegisterSection = () => {
           </span>
         </div>
       </div>
-
+      {errors.root && (
+        <p className="mb-2 text-center font-medium text-red-500">
+          {errors?.root?.message}
+        </p>
+      )}
       {/* Form */}
-      <form className="space-y-5">
+      <form className="space-y-5" onSubmit={handleSubmit(handleRegister)}>
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="name">Full Name*</FieldLabel>
-            <Input
-              className="h-10"
-              type="text"
-              id="name"
-              placeholder="Enter your full name"
-              name="name"
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="email">Email*</FieldLabel>
-            <Input
-              className="h-10"
-              type="email"
-              id="email"
-              placeholder="Enter your email address"
-              name="email"
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="password">Password*</FieldLabel>
-            <InputGroup className="h-10">
-              <InputGroupInput
-                id="password"
-                type={isVisible ? "text" : "password"}
-                placeholder="Enter your password"
-                name="password"
-              />
-              <InputGroupAddon align="inline-end">
-                <button
-                  className="focus:outline-none my-auto px-2 cursor-pointer"
-                  type="button"
-                  onClick={toggleVisibility}
-                >
-                  {isVisible ? (
-                    <FaEye className="pointer-events-none text-xl text-default-400" />
-                  ) : (
-                    <FaEyeSlash className="pointer-events-none text-xl text-default-400" />
-                  )}
-                </button>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="confirm-password">
-              Confirm Password*
-            </FieldLabel>
-            <InputGroup className="h-10">
-              <InputGroupInput
-                id="confirm-password"
-                type={isVisibleConfirm ? "text" : "password"}
-                placeholder="Enter your confirm password"
-                name="confirmPassword"
-              />
-              <InputGroupAddon align="inline-end">
-                <button
-                  className="focus:outline-none my-auto px-2 cursor-pointer"
-                  type="button"
-                  onClick={toggleVisibilityConfirm}
-                >
-                  {isVisibleConfirm ? (
-                    <FaEye className="pointer-events-none text-xl text-default-400" />
-                  ) : (
-                    <FaEyeSlash className="pointer-events-none text-xl text-default-400" />
-                  )}
-                </button>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
+          <Controller
+            name="fullName"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="name">Full Name*</FieldLabel>
+                <Input
+                  {...field}
+                  className="h-10"
+                  type="text"
+                  id="name"
+                  placeholder="Enter your full name"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="email">Email*</FieldLabel>
+                <Input
+                  {...field}
+                  className="h-10"
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email address"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="password"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="password">Password*</FieldLabel>
+                <InputGroup className="h-10">
+                  <InputGroupInput
+                    {...field}
+                    id="password"
+                    type={isVisible ? "text" : "password"}
+                    placeholder="Enter your password"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <button
+                      className="focus:outline-none my-auto px-2 cursor-pointer"
+                      type="button"
+                      onClick={toggleVisibility}
+                    >
+                      {isVisible ? (
+                        <FaEye className="pointer-events-none text-xl text-default-400" />
+                      ) : (
+                        <FaEyeSlash className="pointer-events-none text-xl text-default-400" />
+                      )}
+                    </button>
+                  </InputGroupAddon>
+                </InputGroup>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="confirmPassword">
+                  Confirm Password*
+                </FieldLabel>
+                <InputGroup className="h-10">
+                  <InputGroupInput
+                    {...field}
+                    id="confirmPassword"
+                    type={isVisibleConfirm ? "text" : "password"}
+                    placeholder="Enter your confirm password"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <button
+                      className="focus:outline-none my-auto px-2 cursor-pointer"
+                      type="button"
+                      onClick={toggleVisibilityConfirm}
+                    >
+                      {isVisibleConfirm ? (
+                        <FaEye className="pointer-events-none text-xl text-default-400" />
+                      ) : (
+                        <FaEyeSlash className="pointer-events-none text-xl text-default-400" />
+                      )}
+                    </button>
+                  </InputGroupAddon>
+                </InputGroup>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
         </FieldGroup>
 
-        <Button className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-semibold">
-          Sign Up to ApotekKart
+        <Button
+          className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-semibold"
+          type="submit"
+          disabled={isPendingRegister}
+        >
+          {isPendingRegister ? <SpinnerCircle /> : "Sign Up to ApotekKart"}
         </Button>
       </form>
 

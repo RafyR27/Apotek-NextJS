@@ -2,9 +2,14 @@ interface IUser {
   fullName: string;
   email: string;
   password: string;
-  noHP: string;
+  noHP?: string;
   gambar?: string;
   role?: "admin" | "kasir" | "user";
+}
+
+interface IUserLogin {
+  email: string,
+  password: string,
 }
 
 interface IUserSession {
@@ -12,7 +17,7 @@ interface IUserSession {
   name: string;
   email: string;
   image?: string | null;
-  role?: "admin" | "kasir" | "user";
+  role?: string;
 }
 
 interface ISession {
@@ -24,4 +29,4 @@ interface ISession {
   user: IUserSession;
 }
 
-export { IUser, ISession };
+export { IUser, ISession, IUserLogin };
