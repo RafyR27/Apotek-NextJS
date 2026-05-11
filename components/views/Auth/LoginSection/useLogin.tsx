@@ -8,8 +8,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-export const dynamic = "force-dynamic";
-
 const formSchema = z.object({
   email: z.email("Email is required"),
   password: z.string("password is required"),

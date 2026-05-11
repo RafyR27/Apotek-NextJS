@@ -20,6 +20,8 @@ import { FcGoogle } from "react-icons/fc";
 import { Controller } from "react-hook-form";
 import SpinnerCircle from "@/components/ui/spinner";
 
+export const dynamic = "force-dynamic";
+
 const LoginSection = () => {
   const {
     toggleVisibility,
