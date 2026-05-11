@@ -5,7 +5,7 @@ import environment from "@/config/environment";
 
 export const transporter = nodemailer.createTransport({
   host: environment.EMAIL_SMTP_HOST,
-  port: environment.EMAIL_SMTP_PORT,
+  port: Number(environment.EMAIL_SMTP_PORT),
   auth: {
     user: environment.EMAIL_SMTP_USER,
     pass: environment.EMAIL_SMTP_PASS,
