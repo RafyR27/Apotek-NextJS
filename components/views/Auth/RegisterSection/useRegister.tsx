@@ -15,7 +15,7 @@ const formSchema = z
     fullName: z
       .string("Full name is required")
       .trim()
-      .min(10, "Full name is too short")
+      .min(5, "Full name is too short")
       .regex(/^[a-zA-Z\s]+$/, "Full name can only contain letters"),
 
     email: z.email("Email is required").trim().toLowerCase(),

@@ -2,16 +2,15 @@
 
 import FeedbackLayout from "@/components/layouts/FeedbackLayout/FeedbackLayout";
 import RegisterSuccess from "@/components/views/Auth/RegisterSuccess/RegisterSuccess";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+
+export const dynamic = "force-dynamic";
 
 export default function Success() {
   const router = useRouter();
-
-  const email =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("email")
-      : null;
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
 
   useEffect(() => {
     if (!email) {

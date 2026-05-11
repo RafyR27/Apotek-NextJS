@@ -3,19 +3,12 @@ import { signIn } from "@/lib/auth-client";
 import { IUserLogin } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-const getCallbackURL = () => {
-  if (typeof window === "undefined") return "/admin/dashboard";
-  const params = new URLSearchParams(window.location.search);
-  const rawCallback = params.get("callbackUrl") || "";
-  return rawCallback && rawCallback.startsWith(environment.BETTER_AUTH_URL)
-    ? rawCallback
-    : "/admin/dashboard";
-};
+export const dynamic = "force-dynamic";
 
 const formSchema = z.object({
   email: z.email("Email is required"),
@@ -28,8 +21,13 @@ const useLogin = () => {
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+  const searchParams = useSearchParams();
 
-  const callbackURL = getCallbackURL();
+  const rawCallback = searchParams.get("callbackUrl") || "";
+  const callbackURL =
+    rawCallback && rawCallback.startsWith(environment.BETTER_AUTH_URL)
+      ? rawCallback
+      : "/admin/dashboard";
 
   const loginWithGoogle = async () => {
     await signIn.social({
