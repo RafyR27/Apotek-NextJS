@@ -1,24 +1,17 @@
-"use client";
-
 import FeedbackLayout from "@/components/layouts/FeedbackLayout/FeedbackLayout";
 import RegisterSuccess from "@/components/views/Auth/RegisterSuccess/RegisterSuccess";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+export default async function Success({
+  searchParams,
+}: {
+  searchParams: Promise<{ email: string }>;
+}) {
+  const { email } = await searchParams;
 
-export default function Success() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email");
-
-  useEffect(() => {
-    if (!email) {
-      router.push("/auth/register");
-    }
-  }, [email, router]);
-
-  if (!email) return null;
+  if (!email) {
+    redirect("/auth/register");
+  }
 
   return (
     <FeedbackLayout>

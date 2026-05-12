@@ -27,6 +27,7 @@ const RegisterSuccess = () => {
             width={300}
             height={300}
             className="w-[80%] lg:w-full"
+            loading="eager"
           />
         </div>
         <div className="flex flex-col items-center gap-2 text-center w-full px-6">

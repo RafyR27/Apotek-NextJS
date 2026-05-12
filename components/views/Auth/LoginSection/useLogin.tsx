@@ -3,7 +3,7 @@ import { signIn } from "@/lib/auth-client";
 import { IUserLogin } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -13,15 +13,14 @@ const formSchema = z.object({
   password: z.string("password is required"),
 });
 
-const useLogin = () => {
+const useLogin = (callbackUrl?: string) => {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
-  const searchParams = useSearchParams();
 
-  const rawCallback = searchParams.get("callbackUrl") || "";
+  const rawCallback = callbackUrl || "";
   const callbackURL =
     rawCallback && rawCallback.startsWith(environment.BETTER_AUTH_URL)
       ? rawCallback

@@ -20,7 +20,11 @@ import { FcGoogle } from "react-icons/fc";
 import { Controller } from "react-hook-form";
 import SpinnerCircle from "@/components/ui/spinner";
 
-const LoginSection = () => {
+interface LoginSectionProps {
+  searchParams: string;
+}
+
+const LoginSection = ({ searchParams }: LoginSectionProps) => {
   const {
     toggleVisibility,
     isVisible,
@@ -30,7 +34,7 @@ const LoginSection = () => {
     errors,
     handleLogin,
     isPendingLogin,
-  } = useLogin();
+  } = useLogin(searchParams);
 
   return (
     <>

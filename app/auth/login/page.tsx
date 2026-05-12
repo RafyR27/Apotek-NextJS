@@ -1,14 +1,19 @@
-"use client";
-
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
 import LoginSection from "@/components/views/Auth/LoginSection/LoginSection";
+import { use } from "react";
 
-export const dynamic = "force-dynamic";
+export default function Login({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    callbackUrl?: string;
+  }>;
+}) {
+  const { callbackUrl } = use(searchParams);
 
-export default function Login() {
   return (
     <AuthLayout>
-      <LoginSection></LoginSection>
+      <LoginSection searchParams={callbackUrl || ""}></LoginSection>
     </AuthLayout>
   );
 }
