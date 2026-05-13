@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaHospitalSymbol } from "react-icons/fa";
 
-const RegisterSuccess = () => {
+const ExpiredSection = () => {
     const router = useRouter();
 
     return (
@@ -22,7 +22,7 @@ const RegisterSuccess = () => {
             </Link>
           </div>
           <Image
-            src="/success-register.png"
+            src="/token-expired.png"
             alt="success"
             width={300}
             height={300}
@@ -32,21 +32,21 @@ const RegisterSuccess = () => {
         </div>
         <div className="flex flex-col items-center gap-2 text-center w-full px-6">
           <h1 className="text-2xl lg:text-3xl font-bold text-primary">
-            Almost Done
+            Verification Link Expired
           </h1>
           <p className="text-lg font-bold">
-            If the email is valid, we’ve sent an account activation link.
+            This verification link is no longer valid or has expired.
           </p>
           <Button
             size="lg"
             className="w-full lg:w-1/4 mt-7"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/auth/register")}
           >
-            Back To Home
+            Back To Register
           </Button>
         </div>
       </div>
     );
 }
 
-export default RegisterSuccess;
+export default ExpiredSection;

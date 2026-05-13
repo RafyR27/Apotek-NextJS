@@ -18,7 +18,7 @@ const userSchema = new Schema<IUser>({
   },
   noHP: {
     type: Schema.Types.String,
-    required: true,
+    required: false,
   },
   gambar: {
     type: Schema.Types.String,

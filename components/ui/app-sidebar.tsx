@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Sidebar,
@@ -12,27 +14,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-
-import {
-  FaUsers,
-  FaTasks,
-  FaCog,
-  FaBell,
-  FaPalette,
-  FaWrench,
-  FaShieldAlt,
-  FaBug,
-  FaLock,
-  FaUserSlash,
-  FaFileAlt,
-  FaTools,
-  FaQuestionCircle,
-  FaHospitalSymbol,
-} from "react-icons/fa";
-
-import { MdDashboard, MdApps, MdChat, MdMonitor } from "react-icons/md";
-
-import { IoLogIn } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,47 +23,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
-import { LuChevronsUpDown } from "react-icons/lu";
 import useDialogState from "@/hooks/use-dialog-state";
+import { FaHospitalSymbol } from "react-icons/fa";
+import { LuChevronsUpDown } from "react-icons/lu";
+import SIDEBAR_ADMIN from "./constant/SidebarAdmin.constant";
+import SIDEBAR_KASIR from "./constant/SidebarKasir.constant";
+import { ISession } from "@/types/user";
+import Image from "next/image";
+import { SignOutDialog } from "./SignOutDialog";
+import { usePathname } from "next/navigation";
 
-const sidebarData = {
-  navGroups: [
-    {
-      title: "General",
-      items: [
-        {
-          title: "Dashboard",
-          url: "/",
-          icon: MdDashboard,
-        },
-        {
-          title: "Tasks",
-          url: "/tasks",
-          icon: FaTasks,
-        },
-        {
-          title: "Apps",
-          url: "/apps",
-          icon: MdApps,
-        },
-        {
-          title: "Chats",
-          url: "/chats",
-          icon: MdChat,
-        },
-        {
-          title: "Users",
-          url: "/users",
-          icon: FaUsers,
-        },
-      ],
-    },
-  ],
-};
-
-export function AppSidebar() {
+export function AppSidebar({ user }: { user: ISession }) {
   const { setOpenMobile, isMobile, state } = useSidebar();
   const [open, setOpen] = useDialogState();
+
+  const pathname = usePathname()
+
+  const sidebar = user.user.role === "admin" ? SIDEBAR_ADMIN : SIDEBAR_KASIR;
 
   return (
     <Sidebar collapsible="icon" variant="sidebar" className="p-2">
@@ -112,7 +69,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         {/* conttent */}
-        {sidebarData.navGroups.map((items) => (
+        {sidebar.map((items) => (
           <SidebarGroup key={items.title}>
             <SidebarMenu className="gap-y-3">
               {items.items.map((item: any) => {
@@ -121,7 +78,7 @@ export function AppSidebar() {
                 if (!item.items)
                   return (
                     <SidebarMenuItem key={key}>
-                      <SidebarMenuButton asChild>
+                      <SidebarMenuButton asChild isActive={pathname === item.url}>
                         <Link
                           href={item.url}
                           onClick={() => setOpenMobile(false)}
@@ -148,11 +105,19 @@ export function AppSidebar() {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   {/* avatar */}
-
+                  <Image
+                    src={user.user.image || ""}
+                    alt={`profile-${user.user.name}`}
+                    className="w-8 h-8 rounded-full border-2"
+                    width={300}
+                    height={300}
+                  />
                   {/* name */}
                   <div className="grid flex-1 text-start text-sm leading-tight">
-                    <span className="truncate font-semibold">Budi</span>
-                    <span className="truncate text-xs">Email</span>
+                    <span className="truncate font-semibold">
+                      {user.user.name}
+                    </span>
+                    <span className="truncate text-xs">{user.user.email}</span>
                   </div>
                   <LuChevronsUpDown className="ms-auto size-4" />
                 </SidebarMenuButton>
@@ -166,28 +131,38 @@ export function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                     {/* avatar */}
-
+                    <Image
+                      src={user.user.image || ""}
+                      alt={`profile-${user.user.name}`}
+                      className="w-8 h-8 rounded-full border-2"
+                      width={300}
+                      height={300}
+                    />
                     {/* name */}
                     <div className="grid flex-1 text-start text-sm leading-tight">
-                      <span className="truncate font-semibold">Budi</span>
-                      <span className="truncate text-xs">Email</span>
+                      <span className="truncate font-semibold">
+                        {user.user.name}
+                      </span>
+                      <span className="truncate text-xs">
+                        {user.user.email}
+                      </span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>{/* menu */}</DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem asChild>{/* menu */}</DropdownMenuItem>
-                  <DropdownMenuItem asChild>{/* menu */}</DropdownMenuItem>
-                  <DropdownMenuItem asChild>{/* menu */}</DropdownMenuItem>
+                  <DropdownMenuItem asChild className="p-2">
+                    <Link href="/">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="p-2">
+                    <Link href="/">Settings</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   variant="destructive"
-                  //   onClick={() => setOpen(true)}
+                  className="p-2"
+                  onClick={() => setOpen(true)}
                 >
                   {/* <FaLogOut /> */}
                   Sign out
@@ -197,7 +172,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
 
-        {/* <SignOutDialog open={!!open} onOpenChange={setOpen} /> */}
+        <SignOutDialog open={!!open} onOpenChange={setOpen} />
       </SidebarFooter>
     </Sidebar>
   );

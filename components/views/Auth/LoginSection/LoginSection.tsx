@@ -19,12 +19,15 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { Controller } from "react-hook-form";
 import SpinnerCircle from "@/components/ui/spinner";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 interface LoginSectionProps {
   searchParams: string;
+  verified: boolean;
 }
 
-const LoginSection = ({ searchParams }: LoginSectionProps) => {
+const LoginSection = ({ searchParams, verified }: LoginSectionProps) => {
   const {
     toggleVisibility,
     isVisible,
@@ -35,6 +38,12 @@ const LoginSection = ({ searchParams }: LoginSectionProps) => {
     handleLogin,
     isPendingLogin,
   } = useLogin(searchParams);
+
+  useEffect(() => {
+    if (verified) {
+      toast.success("Email verified", { position: "top-right" });
+    }
+  }, [verified]);
 
   return (
     <>

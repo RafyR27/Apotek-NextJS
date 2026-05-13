@@ -14,15 +14,16 @@ import {
 interface VerificationEmailProps {
   username: string;
   verifyUrl: string;
+  email: string
 }
 
 export function VerificationEmail(props: VerificationEmailProps) {
-  const { username, verifyUrl } = props;
+  const { username, email, verifyUrl } = props;
 
   return (
     <Html lang="en" dir="ltr">
       <Preview>
-        Verify your email address to complete your pharmacy account setup
+        Verify your email address to complete your ApotekKart account setup
       </Preview>
       <Tailwind>
         <Head />
@@ -42,24 +43,40 @@ export function VerificationEmail(props: VerificationEmailProps) {
               </Heading>
 
               <Text className="text-[16px] text-gray-700 leading-6 mb-4">
-                Thank you {username} for creating an account with ApotekKart. To
-                ensure the security of your medical information and prescription
-                orders, please verify your email address by clicking the button
-                below.
+                Hello,
+                <br></br>
+                <br></br>
+                We received a request to create or continue setting up an
+                ApotekKart account using this email address.
               </Text>
 
               <Text className="text-[16px] text-gray-700 leading-6 mb-6">
-                Email verification helps us:
+                If you previously created an account with this email address,
+                your existing password may still be required to sign in. If you
+                forgot your password, you can reset it from the login page.
               </Text>
 
-              <Text className="text-[14px] text-gray-600 leading-5 mb-1 ml-4">
-                • Protect your prescription and health data
+              <Text className="text-[16px] text-gray-700 leading-6 mb-4">
+                Current account information:
               </Text>
               <Text className="text-[14px] text-gray-600 leading-5 mb-1 ml-4">
-                • Send important order and delivery updates
+                • Full Name: {username}
               </Text>
               <Text className="text-[14px] text-gray-600 leading-5 mb-1 ml-4">
-                • Ensure secure access to your ApotekKart account
+                • Email: {email}
+              </Text>
+
+              <Text className="text-[16px] text-gray-700 leading-6 mb-6">
+                Please verify your email address to continue using your account.
+              </Text>
+
+              <Text className="text-[16px] text-gray-700 leading-6 mb-6">
+                Don&apos;t worry if the displayed name is not correct — you can
+                update your profile information later after signing in.
+              </Text>
+
+              <Text className="text-[16px] text-gray-700 leading-6 mb-6">
+                Verify your email by clicking the button below.
               </Text>
             </Section>
 
@@ -87,7 +104,9 @@ export function VerificationEmail(props: VerificationEmailProps) {
             {/* Security Notice */}
             <Section className="bg-amber-50 border border-amber-200 rounded-[8px] p-4 mb-8">
               <Text className="text-[14px] text-amber-800 leading-5 m-0 font-medium">
-                🔒 Security Notice: This verification link will expire in 1 hours. If you didn&apos;t  create an account with PharmaCare+, please ignore this email.
+                🔒 Security Notice: This verification link will expire in 1
+                hours. If you didn&apos;t create an account with ApotekKart,
+                please ignore this email.
               </Text>
             </Section>
 

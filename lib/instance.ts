@@ -6,22 +6,19 @@ const headers = {
 };
 
 const instance = axios.create({
-    baseURL: environment.BASE_URL,
-    headers,
-    timeout: 60 * 1000,
-})
+  baseURL: environment.BASE_URL,
+  headers,
+  timeout: 60 * 1000,
+});
 
 instance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        const status = error.response?.status;
+  (response) => response,
+  (error) => {
+    return Promise.reject({
+      message: error?.response?.data?.message || error?.message,
+      status: error?.response?.status,
+    });
+  },
+);
 
-        if(status === 401){
-            const message = status.response.data.message;
-
-            if(message === "Unauthorized"){
-                
-            }
-        }
-    }
-)
+export default instance;

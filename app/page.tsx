@@ -1,11 +1,22 @@
-"use client";
-
 import MainLayout from "@/components/layouts/MainLayout/MainLayout";
 import HomeSection from "@/components/views/Home/HomeSection";
-import { useSession } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const { data: session } = useSession();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ error: "TOKEN_EXPIRED" }>;
+}) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const { error } = await searchParams;
+
+  if(error){
+    redirect("/token-expired");
+  }
 
   return (
     <MainLayout sessionData={session}>
@@ -13,5 +24,3 @@ export default function Home() {
     </MainLayout>
   );
 }
-
-

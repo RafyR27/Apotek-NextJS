@@ -1,10 +1,10 @@
 import SidebarLayout from "@/components/layouts/SidebarLayout/SidebarLayout";
-import AdminDashboard from "@/components/views/Admin/Dashboard/AdminDashboard";
+import AdminMedicines from "@/components/views/Admin/Medicines/AdminMedicines";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function Dashboard() {
+export default async function Medicines() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -15,7 +15,7 @@ export default async function Dashboard() {
 
   return (
     <SidebarLayout user={session}>
-      <AdminDashboard></AdminDashboard>
+      <AdminMedicines></AdminMedicines>
     </SidebarLayout>
   );
 }

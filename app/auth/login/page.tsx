@@ -7,13 +7,17 @@ export default function Login({
 }: {
   searchParams: Promise<{
     callbackUrl?: string;
+    verified?: boolean;
   }>;
 }) {
-  const { callbackUrl } = use(searchParams);
+  const { callbackUrl, verified } = use(searchParams);
 
   return (
     <AuthLayout>
-      <LoginSection searchParams={callbackUrl || ""}></LoginSection>
+      <LoginSection
+        searchParams={callbackUrl || ""}
+        verified={verified || false}
+      ></LoginSection>
     </AuthLayout>
   );
 }

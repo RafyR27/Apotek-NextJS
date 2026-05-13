@@ -92,7 +92,9 @@ const useRegister = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
       setError("root", {
-        message: error.error.message,
+        message:
+          error?.error?.message ||
+          "Something went wrong",
       });
     },
     onSuccess: (_, variables) => {

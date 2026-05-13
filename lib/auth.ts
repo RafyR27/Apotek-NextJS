@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import environment from "@/config/environment";
-import { sendMail } from "./mailer";
+import { sendMailSecurity, sendMailVerif } from "./mailer";
 
 const client = new MongoClient(environment.DATABASE_URL);
 await client.connect();
@@ -15,16 +15,20 @@ export const auth = betterAuth({
   }),
 
   emailVerification: {
-    sendVerificationEmail: async ({user, url}) => {
-      await sendMail({
+    sendVerificationEmail: async ({ user, url }) => {
+      const urlObj = new URL(url);
+      urlObj.searchParams.set("callbackURL", `/auth/login?verified=true`);
+      const finalUrl = urlObj.toString();
+
+      await sendMailVerif({
         email: user.email,
         username: user.name,
-        verifyUrl: url,
+        verifyUrl: finalUrl,
       });
     },
     sendOnSignUp: true,
     expiresIn: 3600,
-    autoSignInAfterVerification: true
+    autoSignInAfterVerification: false,   
   },
 
   session: {
@@ -45,6 +49,26 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    onExistingUserSignUp: async ({ user }) => {
+      const attemptTime = new Date().toLocaleString("id-ID", {
+        timeZone: "Asia/Jakarta",
+      });
+
+      if (!user.emailVerified) {
+        await auth.api.sendVerificationEmail({
+          body: {
+            email: user.email,
+          },
+        });
+      } else {
+        await sendMailSecurity({
+          email: user.email,
+          username: user.name,
+          changePasswordUrl: `${environment.BETTER_AUTH_URL}/reset-password`,
+          attemptTime,
+        });
+      }
+    },
   },
 
   socialProviders: {
