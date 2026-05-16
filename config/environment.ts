@@ -9,6 +9,9 @@ const environment = {
   EMAIL_SMTP_PORT: process.env.EMAIL_SMTP_PORT || "",
   EMAIL_SMTP_HOST: process.env.EMAIL_SMTP_HOST || "",
   EMAIL_FROM: process.env.EMAIL_FROM || "",
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || "",
+  CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "",
+  CLOUDINARY_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "",
 };
 
 export default environment;

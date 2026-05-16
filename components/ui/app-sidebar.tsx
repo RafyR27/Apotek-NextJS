@@ -32,12 +32,13 @@ import { ISession } from "@/types/user";
 import Image from "next/image";
 import { SignOutDialog } from "./SignOutDialog";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function AppSidebar({ user }: { user: ISession }) {
   const { setOpenMobile, isMobile, state } = useSidebar();
   const [open, setOpen] = useDialogState();
 
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const sidebar = user.user.role === "admin" ? SIDEBAR_ADMIN : SIDEBAR_KASIR;
 
@@ -78,13 +79,16 @@ export function AppSidebar({ user }: { user: ISession }) {
                 if (!item.items)
                   return (
                     <SidebarMenuItem key={key}>
-                      <SidebarMenuButton asChild isActive={pathname === item.url}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.url}
+                      >
                         <Link
                           href={item.url}
                           onClick={() => setOpenMobile(false)}
                         >
                           {item.icon && <item.icon />}
-                          <span>{item.title}</span>
+                          <span className={cn(isMobile && "text-[1rem]")}>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
